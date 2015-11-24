@@ -1,0 +1,39 @@
+{
+  "name": "prepare-commit-msg-angular",
+  "version": "0.1.0",
+  "main": "index.js",
+  "bin": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "ghooks": "^1.0.1",
+    "validate-commit-msg": "^1.0.0"
+  },
+  "scripts": {},
+  "config": {
+    "ghooks": {
+      "commit-msg": "validate-commit-msg $2",
+      "prepare-commit-msg": "./index.js $2 $3"
+    }
+  },
+  "description": "Githook to prepare a commit message following Angular guidelines and display documentation about it",
+  "author": "Cédric Malard <c.malard-git@valdun.net>",
+  "license": "MIT",
+  "keywords": [
+    "githook",
+    "prepare-commit-msg",
+    "commit",
+    "message",
+    "git",
+    "angular",
+    "guidelines",
+    "documentation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://cmalard@github.com/cmalard/prepare-commit-msg-angular.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cmalard/prepare-commit-msg-angular/issues"
+  },
+  "homepage": "https://github.com/cmalard/prepare-commit-msg-angular#readme"
+}
