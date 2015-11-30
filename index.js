@@ -39,7 +39,9 @@ var doc = `#---
 #
 `;
 
-content = content.replace(scissorsLine, doc + scissorsLine);
+content = (content.indexOf(scissorsLine) !== -1) ?
+    content.replace(scissorsLine, doc + scissorsLine) :
+    content + doc;
 
 if (isNewCommit) {
   var currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().split('\n').join('');
