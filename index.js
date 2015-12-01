@@ -8,9 +8,8 @@ var execSync = require('child_process').execSync;
 var commitMsgFile = process.argv[2] || './.git/COMMIT_EDITMSG';
 var isNewCommit = (process.argv[3] === 'undefined');
 
-var content = fs.readFileSync(commitMsgFile).toString();
 var scissorsLine = '# ------------------------ >8 ------------------------';
-var doc = `#---
+var doc = `${scissorsLine}
 # <type>(<scope>): <subject>
 # <BLANK LINE>
 # <body>
@@ -36,17 +35,31 @@ var doc = `#---
 # - no dot (.) at the end
 #---
 # https://github.com/ajoslin/conventional-changelog/blob/master/conventions/angular.md
-#
 `;
 
-content = (content.indexOf(scissorsLine) !== -1) ?
-    content.replace(scissorsLine, doc + scissorsLine) :
-    content + doc;
+function getPrefilledMessage() {
+  if (!isNewCommit) {
+    return '';
+  }
 
-if (isNewCommit) {
-  var currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().split('\n').join('');
-  content = '(' + currentBranch + '): ' + content;
+  var currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+  return '(' + currentBranch + '): ';
 }
+
+function getContentWithDoc() {
+  if (content.indexOf(scissorsLine) !== -1) {
+    // git commit -v
+    content = content.replace(scissorsLine, doc + scissorsLine);
+  } else if (content.indexOf('#') !== -1) {
+    // other cases where there is a prompt to display doc
+    content = content + doc;
+  }
+
+  return content;
+}
+
+var content = fs.readFileSync(commitMsgFile).toString();
+content = getPrefilledMessage() + getContentWithDoc();
 
 fs.writeFileSync(commitMsgFile, content);
 process.exit(0);
