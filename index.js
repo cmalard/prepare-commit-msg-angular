@@ -8,6 +8,7 @@ var execSync = require('child_process').execSync;
 var commitMsgFile = process.argv[2] || './.git/COMMIT_EDITMSG';
 var isNewCommit = (process.argv[3] === 'undefined');
 
+var maxCharsLine = '#⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴⎴';
 var scissorsLine = '# ------------------------ >8 ------------------------';
 var doc = `${scissorsLine}
 # <type>(<scope>): <subject>
@@ -46,6 +47,14 @@ function getPrefilledMessage() {
   return '(' + currentBranch + '): ';
 }
 
+function getMaxCharsLine() {
+  if (!isNewCommit) {
+    return '';
+  }
+
+  return '\n' + maxCharsLine;
+}
+
 function getContentWithDoc() {
   if (content.indexOf(scissorsLine) !== -1) {
     // git commit -v
@@ -59,7 +68,7 @@ function getContentWithDoc() {
 }
 
 var content = fs.readFileSync(commitMsgFile).toString();
-content = getPrefilledMessage() + getContentWithDoc();
+content = getPrefilledMessage() + getMaxCharsLine() + getContentWithDoc();
 
 fs.writeFileSync(commitMsgFile, content);
 process.exit(0);
